@@ -1,9 +1,13 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import cors from 'cors';
-import postRoutes from './routes/posts.js';
-import userRoutes from './routes/users.js';
+const express=require('express')
+const dotenv=require('dotenv')
+const mongoose=require('mongoose')
+const cors=require('cors')
+const { log, disableProgress } = require('npmlog')
+const  Post  = require('./models/Post')
+console.log(Post);
+// const postRoutes=require('./routes/posts.js')
+// const userRoutes=require('./routes/users.js')
+require('dotenv').config()
 
 dotenv.config();
 const port = process.env.PORT;
@@ -17,8 +21,8 @@ app.use((req, res, next) => {
     next();
 })
 
-app.use('/api/posts', postRoutes);
-app.use('/api/user', userRoutes);
+// app.use('/api/posts', postRoutes);
+// app.use('/api/user', userRoutes);
 
 const connectDB = async () => {
     try {
@@ -37,5 +41,29 @@ const connectDB = async () => {
 };
 
 connectDB().then(() => {
-    app.listen(port, () => console.log(`listening on port ${port}`));
+   console.log("mongodb connected");
 }).catch(err => console.log(err));
+
+
+app.get("/posts", async (req,res) => {
+    let dbres = await Post.find();
+
+    res.send(dbres)
+})
+app.post("/posts", async (req,res) => {
+    let dbres = await Post.create(req.body);
+
+    res.send(dbres)
+})
+
+
+
+
+
+
+
+
+
+app.listen(4000, () => {
+    console.log("server is live NOW on 4000");
+})

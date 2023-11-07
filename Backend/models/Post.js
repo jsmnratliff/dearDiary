@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+const { Schema, model } = require("mongoose");
 
 const PostSchema = new Schema({
     date: {
@@ -26,4 +26,5 @@ const PostSchema = new Schema({
     timestamps: true
 });
 
-export default model('Post', PostSchema);
+const Post = model('Post', PostSchema);
+module.exports = Post;

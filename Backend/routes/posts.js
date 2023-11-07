@@ -1,15 +1,15 @@
-import express from 'express';
-import { requireAuth } from '../middleware/auth.js';
-import { 
+const express = ('express');
+const { requireAuth } = ('../middleware/auth.js');
+const { 
     getAllPosts,
     getPost,
     createPost,
     deletePost,
     updatePost
- } from '../controllers/postControllers.js';
+ } = '../controllers/postControllers.js';
 
-const router = express.Router();
-router.use(requireAuth);
+// const router = express.Router();
+// router.use(requireAuth);
 
 router.get('/', getAllPosts);
 router.get('/:id', getPost);
