@@ -1,56 +1,49 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import PostForm from '../components/PostForm';
 import styles from '../styles/styles.module.scss';
 import { PostsContext } from '../context/PostContext.jsx';
 
 const Home = () => {
-    // const { posts, dispatch } = usePostsContext();
-    // const { user } = useAuthContext();
-    const {posts,  setPosts } = useContext(PostsContext)
+    const { posts, setPosts } = useContext(PostsContext);
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleDeletePost = async (postId) => {
         try {
             await axios.delete(`/posts/${postId}`);
             setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
         } catch (error) {
-        if (error.response) {
-             if (error.response.status === 404) {
-                console.error('Not Deleted');
-        } else {
-             console.error('Error occurred on server. Status:' , error.response.status);
+            if (error.response) {
+                if (error.response.status === 404) {
+                    console.error('Not Deleted');
+                } else {
+                    console.error('Error occurred on server. Status:', error.response.status);
+                }
+            } else if (error.request) {
+                console.error('No response from the server.');
+            } else {
+                console.error('Unknown error');
+            }
         }
-    } else if (error.request) {
-        console.error('No response from server.');
-    } else {
-        console.error()
     }
-    
-    };
-}
 
     useEffect(() => {
         const fetchPosts = async () => {
-            const response = await axios({
-                method: "get",
-                url:"/posts"
-            });
-
-            setPosts(response.data)
-
-
+            setIsLoading(true); 
+            try {
+                const response = await axios.get("/posts");
+                setPosts(response.data);
+            } finally {
+                setIsLoading(false); 
+            }
         };
-         fetchPosts();
+
+        fetchPosts();
     }, []);
 
-    if (!posts) {
+    if (isLoading) {
         return (
             <div className="spinner">
-                loading...
-                {/* <HashLoader
-                    color="#36d7b7"
-                    size={100}
-                /> */}
+                Loading...
             </div>
         );
     }

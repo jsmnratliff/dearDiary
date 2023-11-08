@@ -1,8 +1,7 @@
-import { useRoutes, Navigate } from 'react-router-dom';
+import { useRoutes } from 'react-router-dom';
 import Layout from './pages/Layout';
 import Home from './pages/Home';
-
-import PostForm from './components/PostForm';
+import PostForm from './components/PostForm.jsx';
 
 const App = () => {
     // const { user } = useAuthContext();
@@ -12,7 +11,7 @@ const App = () => {
             element: <Layout />,
             children: [
                 { path: '/', element: <Home />  },
-                { path: '/newPost', element: <PostForm/>  },
+                { path: '/newPost', element: <PostForm />  },
                 // { path: '/api/signup', element: !user ? <Signup /> : <Navigate to="/" /> },
                 // { path: '/api/login', element: !user ? <Login /> : <Navigate to="/" /> },
             ]

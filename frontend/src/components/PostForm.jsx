@@ -6,31 +6,40 @@ function PostForm() {
   const [content, setContent] = useState('');
   const [errors, setErrors] = useState([]); // Initialize errors as an empty array
 
-  const handleSubmit = () => {
-    // Validate input fields and set errors as needed
-    // if (!title.trim()) {
-    //   setErrors([...errors, 'Title is required']);
-    // } else if (title.length < 5) {
-    //   setErrors([...errors, 'Title must be at least 5 characters']);
-    // }
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent the default form submission
 
-    // if (!content.trim()) {
-    //   setErrors([...errors, 'Content is required']);
-    // } else if (content.length < 10) {
-    //   setErrors([...errors, 'Content must be at least 10 characters']);
-    // }
+    // Clear existing errors
+    setErrors([]);
+
+    // Validate input fields
+    if (!title.trim()) {
+      setErrors((prevErrors) => [...prevErrors, 'Title is required']);
+    } else if (title.length < 5) {
+      setErrors((prevErrors) => [...prevErrors, 'Title must be at least 5 characters']);
+    }
+
+    if (!content.trim()) {
+      setErrors((prevErrors) => [...prevErrors, 'Content is required']);
+    } else if (content.length < 10) {
+      setErrors((prevErrors) => [...prevErrors, 'Content must be at least 10 characters']);
+    }
 
     // If there are errors, stop the submission
-    axios({
-        method: "POST",
-        url: "/posts",
-        data: {title, content}
-    }).then((res) => {
-        console.log(res);
-        // put into state
-    })
+    if (errors.length > 0) {
+      return;
+    }
 
     // If no errors, submit the form or perform other actions
+    axios
+      .post('/posts', { title, content })
+      .then((res) => {
+        console.log(res);
+        // Put the response data into state or perform other actions
+      })
+      .catch((error) => {
+        console.error('Axios error:', error);
+      });
   };
 
   return (
@@ -53,9 +62,7 @@ function PostForm() {
             onChange={(e) => setContent(e.target.value)}
           />
         </div>
-        <button type="button" onClick={handleSubmit}>
-          Submit
-        </button>
+        <button type="submit">Submit</button>
       </form>
 
       {errors.length > 0 && (
