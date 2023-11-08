@@ -4,6 +4,7 @@ const mongoose=require('mongoose')
 const cors=require('cors')
 const { log, disableProgress } = require('npmlog')
 const  Post  = require('./models/Post')
+const path = require('path')
 console.log(Post);
 // const postRoutes=require('./routes/posts.js')
 // const userRoutes=require('./routes/users.js')
@@ -20,6 +21,15 @@ app.use((req, res, next) => {
     console.log(req.path, req.method);
     next();
 })
+
+app.use((req, res, next)=> {
+    if (req.path.startsWith('/server')) {
+        req.url = req.url.replace('/server', ''); // strip /server from the path
+    }
+    next();
+});
+
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
 // app.use('/api/posts', postRoutes);
 // app.use('/api/user', userRoutes);
