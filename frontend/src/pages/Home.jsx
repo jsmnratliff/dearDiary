@@ -27,6 +27,7 @@ const Home = () => {
     }
     
     };
+}
 
     useEffect(() => {
         const fetchPosts = async () => {
